@@ -13,30 +13,31 @@ def get_datetime():
     """
     Getting Datetime using localtime
     with format : YYYY-MM-DD hh:mm:ss
+    and follow index 0 1  2  3  4  5
 
     :return string
     """
     localtime = time.localtime()
-    date_time = ""
+    yyyy, mm, dd, h, m, s = localtime[:6]
 
-    for index, value in enumerate(localtime):
-        if index < 2:
-            # Save Year Character
-            date_time += "{}-".format(value)
+    return "{}-{}-{} {}:{}:{}".format(
+        yyyy, mm, dd,
+        h, m, s
+    )
 
-        elif index == 2:
-            # Save Month and Day Character
-            date_time += "{} ".format(value)
 
-        elif 2 < index < 5:
-            # Save Hour and Minute Character
-            date_time += "{}:".format(value)
+def get_date():
+    localtime = time.localtime()
+    y, m, d = localtime[:3]
 
-        elif index == 5:
-            # Save Second Character
-            date_time += "{}".format(value)
+    return "{}-{}-{}".format(y, m, d)
 
-    return date_time
+
+def get_time():
+    localtime = time.localtime()
+    h, m, s = localtime[3:6]
+
+    return "{}:{}:{}".format(h, m, s)
 
 
 def get(arg):

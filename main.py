@@ -1,4 +1,5 @@
 import os
+import run
 import datetime
 
 from sdcard import SDCard
@@ -14,42 +15,49 @@ Now list directory at root :
 - /
     |- disk/
     |- boot.py
-    |- main.py
+    |- run.py
     |- ....
 """
+MOUNT_DIR = '/disk'
 disk = SDCard(SPI(1), Pin(15))
-os.mount(disk, '/disk')
+os.mount(disk, MOUNT_DIR)
 
 """
+Initialize DHT11 Module 
+to Read Humidity and Temperature.
+Where, there are 3 useful function such as :
+- measure(): To Read and Calculate humidity and temperature
+- humidity(): Getting the result of calculating humidity
+- temperature(): Getting the result of calculating temperature
 """
 dht = DHT11(Pin(2))
 
 file_name = None
-file = None
+mode = None
 
 while True:
-    """ Run Main Program """
+    """
+    This looping run the board 
+    to get and save data humidity and temperature
+    after setup configuration success at file boot.py 
+    """
     hour = datetime.get(datetime.HOUR)
 
-    if hour == 0 or file_name is None:
-        date = "{}-{}-{}".format(
-            datetime.get(datetime.YEAR),
-            datetime.get(datetime.MONTH),
-            datetime.get(datetime.DAY))
-        file_name = "/disk/data-{}-{}".format(date, str(hour))
-        file = open(file_name, 'w')
+    if hour is 0 or file_name is None:
+        date = datetime.get_date()
+        listdir = os.listdir(MOUNT_DIR)
+        file_name = "{}/data-{}".format(MOUNT_DIR, date)
+        listdir = list(filter(lambda name: "data-".format(date) in name, listdir))
+
+        if len(listdir) is 0:
+            mode = 'w'
+        else:
+            mode = 'a'
 
     else:
-        file = open(file_name, 'a')
+        mode = 'a'
 
-    dht.measure()
-    humidity = dht.humidity()
-    temperature = dht.temperature()
-    date_time = datetime.get_datetime()
-
-    file.write("{};\thumidity:{};\ttemperature:{};".format(
-        str(date_time), str(humidity), str(temperature)))
-    file.close()
+    run.get_data(dht, file_name, mode)
 
     # Delay for 5 Minute
-    sleep(300)
+    sleep(5)
