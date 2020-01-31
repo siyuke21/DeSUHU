@@ -1,8 +1,7 @@
 import os
-import datetime
 
 
-def get_data(dht, file_name, mode):
+def get_data(date_time, dht, file_name, mode):
     """
     This function used
     to getting and saving data.
@@ -16,16 +15,19 @@ def get_data(dht, file_name, mode):
     dht.measure()
     humidity = dht.humidity()
     temperature = dht.temperature()
-    date_time = datetime.get_datetime()
 
     file = open(file_name, mode)
 
     try:
-        file.write("{};\thumidity:{};\ttemperature:{};\n".format(
-            str(date_time), str(humidity), str(temperature)))
+        data_write = "{};\thumidity:{};\ttemperature:{};\n".format(
+            str(date_time), str(humidity), str(temperature))
+
+        file.write(data_write)
+        print(data_write)
 
     except:
-        println("Error When Writing Data to file")
+        print("Error When Writing Data to file")
 
     finally:
         file.close()
+        print('Done')
