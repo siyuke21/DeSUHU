@@ -10,8 +10,15 @@ import gc
 import esp
 import network
 
-from machine import Pin
-from time import sleep
-
 esp.osdebug(None)
 gc.collect()
+
+""" Mounting Storage Disk """
+from lib import SDCard
+from lib import MOUNT_DIR
+from machine import Pin
+from machine import SPI
+
+
+disk = SDCard(SPI(1), Pin(15))
+os.mount(disk, MOUNT_DIR)
