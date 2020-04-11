@@ -1,1 +1,2 @@
-from IO import IO
+from io import IO
+from sensor import Sensor
