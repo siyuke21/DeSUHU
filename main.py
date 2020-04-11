@@ -1,23 +1,30 @@
+# Handling Bug Micropython when importing 'utils'
+try:
+    import utils
+
+except:
+    pass
+
 from lib import MOUNT_DIR
 from time import sleep
-from utils import IO
-from utils import Sensor
+from utils.file import File
+from utils.sensor import Sensor
 
 from boot import ds
 from boot import dht
 
-sensor = Sensor()
+sensor = Sensor(dht)
 
 def loop():
-    file_name = "{}/data-{}.txt".format(MOUNT_DIR, ds.DateTime())
-    io = IO(path=file_name)
+    date = "{}-{}-{}".format(ds.Day(), ds.Month(), ds.Year())
+    time = "{}-{}-{}".format(ds.Hour(), ds.Minute(), ds.Second())
 
-    if ds.Hour() == 0:
-        io.set_mode('w')
+    file_name = "{}/data-{}.txt".format(MOUNT_DIR, date)
+    io = File(path=file_name)
 
     # read data from sensor dht 
     # and save to variable data.
-    data = sensor.read_dht()
+    data = sensor.read_dht(time)
 
     # Write data to file
     io.save(data)

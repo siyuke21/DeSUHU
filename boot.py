@@ -6,17 +6,17 @@ So, do setup configuration for Board
 at this file.
 """
 
-import gc
+# import gc
 import os
-import esp
-import network
+# import esp
+# import network
 
 from lib import *
 from machine import Pin
 from machine import SPI
 
-esp.osdebug(None)
-gc.collect()
+# esp.osdebug(None)
+# gc.collect()
 
 """ Mount SDCard to directory /disk """
 _disk = SDCard(SPI(1), Pin(15))
