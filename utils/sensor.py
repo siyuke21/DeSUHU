@@ -12,7 +12,7 @@ class Sensor:
         data = "humidity:{};\ttemperature:{};\n".format(
             str(humidity), str(temperature))
 
-        if date_time != None:
+        if date_time is not None:
             data = "{};\t{}".format(date_time, data)
 
         return data
